@@ -44,7 +44,10 @@ public class TestOp_Linear extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor grabberSlide = null;
     private Servo leftGrabber = null;
+    private Servo arm = null;
+    private Servo rightGrabber = null;
 
     @Override
     public void runOpMode() {
@@ -56,7 +59,12 @@ public class TestOp_Linear extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
+        grabberSlide = hardwareMap.get(DcMotor.class, "grabberSlide");
         leftGrabber = hardwareMap.servo.get("leftGrabber");
+        rightGrabber = hardwareMap.servo.get("rightGrabber");
+        arm = hardwareMap.servo.get("arm");
+
+
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -76,17 +84,41 @@ public class TestOp_Linear extends LinearOpMode {
             double leftPower;
             double rightPower;
             double leftGrabberPosition;
+            double grabberSlidePower;
+            double grabberSlidePower2;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             leftPower  = -gamepad1.left_stick_y ;
-            rightPower = -gamepad1.right_stick_y ;
-            leftGrabberPosition = gamepad1.left_trigger;
+            rightPower = -gamepad1.right_stick_y;
+            grabberSlidePower = -gamepad1.right_trigger;
+            grabberSlidePower2 = gamepad1.left_trigger;
+
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
-            leftGrabber.setPosition(leftGrabberPosition);
+            if (gamepad1.a)
+            {
+                leftGrabber.setPosition(90);
+                rightGrabber.setPosition(0);
+            }
+            else if (gamepad1.b)
+            {
+                leftGrabber.setPosition(0);
+                rightGrabber.setPosition(90);
+            }
+            if (gamepad1.right_bumper)
+            {
+               arm.setPosition(180);
+            }
+            else if (gamepad1.left_bumper)
+            {
+                arm.setPosition(0);
+            }
+
+            grabberSlide.setPower(grabberSlidePower);
+            grabberSlide.setPower(grabberSlidePower2);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
