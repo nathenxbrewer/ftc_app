@@ -44,10 +44,10 @@ public class TestOp_Linear extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private DcMotor grabberSlide = null;
-    private Servo leftGrabber = null;
+    private DcMotor grabberslide = null;
+    private Servo leftgrabber = null;
     private Servo arm = null;
-    private Servo rightGrabber = null;
+    private Servo rightgrabber = null;
 
     @Override
     public void runOpMode() {
@@ -59,9 +59,9 @@ public class TestOp_Linear extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
-        grabberSlide = hardwareMap.get(DcMotor.class, "grabberSlide");
-        leftGrabber = hardwareMap.servo.get("leftGrabber");
-        rightGrabber = hardwareMap.servo.get("rightGrabber");
+        grabberslide = hardwareMap.get(DcMotor.class, "grabberslide");
+        leftgrabber = hardwareMap.servo.get("leftgrabber");
+        rightgrabber = hardwareMap.servo.get("rightgrabber");
         arm = hardwareMap.servo.get("arm");
 
 
@@ -71,8 +71,6 @@ public class TestOp_Linear extends LinearOpMode {
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -84,29 +82,54 @@ public class TestOp_Linear extends LinearOpMode {
             double leftPower;
             double rightPower;
             double leftGrabberPosition;
-            double grabberSlidePower;
+            double grabberSlidePower = 0;
             double grabberSlidePower2;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            leftPower  = -gamepad1.left_stick_y ;
-            rightPower = -gamepad1.right_stick_y;
-            grabberSlidePower = -gamepad1.right_trigger;
-            grabberSlidePower2 = gamepad1.left_trigger;
+
+            // took out because mechanum uses POV
+           // leftPower  = -gamepad1.left_stick_y ;
+            //rightPower = -gamepad1.right_stick_y;
+           // grabberSlidePower = null;
+           // grabberSlidePower2 = gamepad1.left_trigger;
+
+
+            // POV Mode uses left stick to go forward, and right stick to turn.
+            // - This uses basic math to combine motions and is easier to drive straight.
+            double drive = -gamepad1.left_stick_y;
+            double turn  =  gamepad1.right_stick_x;
+            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
-            if (gamepad1.a)
+
+            while (gamepad2.dpad_up)
             {
-                leftGrabber.setPosition(90);
-                rightGrabber.setPosition(0);
+                grabberSlidePower = 1;
+                grabberslide.setPower(grabberSlidePower);
             }
-            else if (gamepad1.b)
+            while (gamepad2.dpad_down)
             {
-                leftGrabber.setPosition(0);
-                rightGrabber.setPosition(90);
+                grabberSlidePower = -1;
+                grabberslide.setPower(grabberSlidePower);
+
+            }
+
+
+
+            if (gamepad2.a)
+            {
+                leftgrabber.setPosition(90);
+                rightgrabber.setPosition(0);
+            }
+            else if (gamepad2.b)
+            {
+                leftgrabber.setPosition(0);
+                rightgrabber.setPosition(90);
             }
             if (gamepad1.right_bumper)
             {
@@ -117,8 +140,8 @@ public class TestOp_Linear extends LinearOpMode {
                 arm.setPosition(0);
             }
 
-            grabberSlide.setPower(grabberSlidePower);
-            grabberSlide.setPower(grabberSlidePower2);
+            grabberslide.setPower(grabberSlidePower);
+           // grabberslide.setPower(grabberSlidePower2);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

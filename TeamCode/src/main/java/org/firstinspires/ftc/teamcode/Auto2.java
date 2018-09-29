@@ -1,25 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="TestAuto", group="Linear Opmode")
+@Autonomous(name="Auto2", group="Linear Opmode")
 //@Disabled
-public class TestAuto_Linear extends LinearOpMode {
+public class Auto2 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor rightDrive = null;
     private DcMotor leftDrive = null;
-    private DcMotor grabberSlider = null;
-    private Servo leftGrabberServo = null;
-    private Servo rightGrabberServo = null;
+    private DcMotor grabberslide = null;
+    private Servo rightgrabber = null;
+    private Servo leftgrabber = null;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -30,40 +27,60 @@ public class TestAuto_Linear extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
+        leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
-        grabberSlider = hardwareMap.get(DcMotor.class, "grabberSlider");
-        leftGrabberServo = hardwareMap.servo.get("leftGrabber");
-        rightGrabberServo = hardwareMap.servo.get("rightGrabber");
+        grabberslide = hardwareMap.get(DcMotor.class, "grabberslide");
+        rightgrabber = hardwareMap.servo.get("rightgrabber");
+        leftgrabber = hardwareMap.servo.get("leftgrabber");
+
+
 
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftGrabberServo.setPosition(0.0);
-        rightGrabberServo.setPosition(0.0);
 
+        leftgrabber.setPosition(0);
+        rightgrabber.setPosition(0);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+        DriveForward(1);
+        Thread.sleep(5000);
+        TurnRight(1);
+        DriveForward(1);
+        Thread.sleep(5000);
+        TurnRight(1);
+        DriveForward(1);
+        Thread.sleep(5000);
+        TurnRight(1);
+        openGrabber();
+        Thread.sleep(500);
+        closeGrabber();
+       Thread.sleep(500);
+        openGrabber();
+        Thread.sleep(500);
+        closeGrabber();
+        Thread.sleep(500);
+        openGrabber();
+        Thread.sleep(500);
+        closeGrabber();
+        Thread.sleep(500);
+        openGrabber();
+        Thread.sleep(500);
+        closeGrabber();
+        Thread.sleep(500);
+        openGrabber();
+        Thread.sleep(500);
+        closeGrabber();
+        Thread.sleep(500);
+        TurnRight(1);
+        Thread.sleep(8000);
 
 
-        DriveForward(1);
-        Thread.sleep(5000);
-        TurnRight(1);
-        Thread.sleep(1800);
-        DriveForward(1);
-        Thread.sleep(5000);
-        TurnRight(1);
-        Thread.sleep(1800);
-        DriveForward(1);
-        Thread.sleep(5000);
-        TurnLeft(1);
-        StopMoving();
-        TurnRight(1);
-        Thread.sleep(5000);
+
 
 
 
@@ -78,53 +95,42 @@ public class TestAuto_Linear extends LinearOpMode {
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
         }
+
+
     }
     public void DriveForward(double power)
     {
         leftDrive.setPower(power);
         rightDrive.setPower(power);
-
     }
 
     public void DriveBackwards(double power)
     {
-      leftDrive.setPower(-power);
-      rightDrive.setPower(-power);
+        DriveForward(-power);
     }
 
-    public void TurnRight(double power)
+    public void TurnRight(double power) throws InterruptedException
     {
-        leftDrive.setPower(power);
-        rightDrive.setPower(-power);
+       leftDrive.setPower(power);
+       rightDrive.setPower(-power);
+       Thread.sleep(1800);
     }
 
-    public void TurnLeft (double power)
+    public void TurnLeft (double power, long time) throws InterruptedException
     {
         leftDrive.setPower(-power);
         rightDrive.setPower(power);
+        Thread.sleep(1800);
     }
 
-    public void StopMoving ()
+    public void openGrabber ()
     {
-        DriveForward(0);
+        leftgrabber.setPosition(180);
+        rightgrabber.setPosition(180);
     }
-
-    public void TurnAround (double power) throws InterruptedException
+    public void closeGrabber ()
     {
-       TurnRight(power);
-       Thread.sleep(5000);
-       StopMoving();
-    }
-
-    public void OpenGrabber (double power)
-    {
-        leftGrabberServo.setPosition(180);
-        rightGrabberServo.setPosition(180);
-    }
-
-    public void CloseGrabber (double power)
-    {
-        leftGrabberServo.setPosition(0);
-        rightGrabberServo.setPosition(0);
+        leftgrabber.setPosition(0);
+        rightgrabber.setPosition(0);
     }
 }
