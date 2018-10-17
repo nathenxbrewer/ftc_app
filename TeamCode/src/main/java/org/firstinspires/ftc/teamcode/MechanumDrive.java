@@ -46,8 +46,6 @@ public class MechanumDrive extends LinearOpMode {
     private DcMotor motorRF = null;
     private DcMotor motorRB = null;
 
-
-
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -60,9 +58,6 @@ public class MechanumDrive extends LinearOpMode {
         motorLB  = hardwareMap.get(DcMotor.class, "motorLB");
         motorRF  = hardwareMap.get(DcMotor.class, "motorRF");
         motorRB  = hardwareMap.get(DcMotor.class, "motorRB");
-
-
-
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -82,10 +77,10 @@ public class MechanumDrive extends LinearOpMode {
             //Motor speed variables
             //Direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right.
 //declares variables to store the value of the two sticks combined.
-            double LFspeed = gamepad1.left_stick_y - gamepad1.left_stick_x;
-            double LBspeed = gamepad1.left_stick_y + gamepad1.left_stick_x;
-            double RFspeed = gamepad1.right_stick_y + gamepad1.left_stick_x;
-            double RBspeed = gamepad1.right_stick_y - gamepad1.left_stick_x;
+            float LFspeed = gamepad1.left_stick_y - gamepad1.left_stick_x;
+            float LBspeed = gamepad1.left_stick_y + gamepad1.left_stick_x;
+            float RFspeed = gamepad1.right_stick_y + gamepad1.left_stick_x;
+            float RBspeed = gamepad1.right_stick_y - gamepad1.left_stick_x;
 
 //Clips values to keep them between -1 and 1.
             LFspeed = Range.clip(LFspeed, -1, 1);
