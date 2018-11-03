@@ -32,6 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -45,6 +47,7 @@ public class Mecanum extends LinearOpMode {
     private DcMotor RB = null;
     private DcMotor LF = null;
     private DcMotor LB = null;
+    private DcMotor Scoop = null;
 
     @Override
     public void runOpMode() {
@@ -58,11 +61,15 @@ public class Mecanum extends LinearOpMode {
         RB = hardwareMap.get(DcMotor.class, "RB");
         LF  = hardwareMap.get(DcMotor.class, "LF");
         LB  = hardwareMap.get(DcMotor.class, "LB");
+        Scoop = hardwareMap.get(DcMotor.class, "Scoop");
+
 
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        LB.setDirection(DcMotor.Direction.REVERSE);
+        LF.setDirection(DcMotor.Direction.REVERSE);
+
         //rightDrive.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -77,18 +84,66 @@ public class Mecanum extends LinearOpMode {
             double LBPower;
             double RBPower;
 
+            double MotorStrenght = 0.50;
 
-            LFPower = Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x, -1.0, 1.0) ;
-            LBPower = Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x, -1.0, 1.0) ;
-            RFPower = Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x, -1.0, 1.0) ;
-            RBPower = Range.clip(gamepad1.right_stick_y - gamepad1.left_stick_x, -1.0, 1.0) ;
+
+            LFPower = MotorStrenght * (gamepad1.left_stick_y - gamepad1.left_stick_x);
+            LBPower = MotorStrenght * (gamepad1.left_stick_y + gamepad1.left_stick_x);
+            RFPower = MotorStrenght * (gamepad1.left_stick_y - gamepad1.left_stick_x);
+            RBPower = MotorStrenght * (gamepad1.left_stick_y + gamepad1.left_stick_x);
+
+
+            LFPower = MotorStrenght * gamepad1.right_stick_x;
+            LBPower = MotorStrenght * gamepad1.right_stick_x;
+            RFPower = MotorStrenght * (-gamepad1.right_stick_x);
+            RBPower = MotorStrenght * (-gamepad1.right_stick_x);
+
+            LF.setPower(LFPower);
+            RF.setPower(RFPower);
+            LB.setPower(LBPower);
+            RB.setPower(RBPower);
+
+            if (gamepad2.right_bumper) {
+                Scoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Scoop.setTargetPosition(610);
+                Scoop.setPower(1);
+            }
+
+            if (gamepad2.left_bumper) {
+                Scoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Scoop.setTargetPosition(0);
+                Scoop.setPower(1);
+            }
+
+
+
+
+
+
+
+           /* while (gamepad1.left_stick_y <= 1.0 &gamepad1.left_stick_y >= -1.0) {
+                LF.setPower(gamepad1.left_stick_y);
+                LB.setPower(gamepad1.left_stick_y);
+                RF.setPower(gamepad1.left_stick_y);
+                RB.setPower(gamepad1.left_stick_y);
+            }
+
+            while (gamepad1.left_stick_x <= 1.0 &gamepad1.left_stick_x >= -1.0){
+                LF.setPower(gamepad1.left_stick_x);
+                LB.setPower(-gamepad1.left_stick_x);
+                RF.setPower(-gamepad1.left_stick_x);
+                RB.setPower(gamepad1.left_stick_x);
+            } */
+
+
+
 
 
             // Send calculated power to wheels
-            LF.setPower(LFPower);
-            LB.setPower(LBPower);
-            RF.setPower(RFPower);
-            RB.setPower(RBPower);
+           // LF.setPower(LFPower);
+           // LB.setPower(LBPower);
+          //  RF.setPower(RFPower);
+          //  RB.setPower(RBPower);
 
 
             // Show the elapsed game time and wheel power.
