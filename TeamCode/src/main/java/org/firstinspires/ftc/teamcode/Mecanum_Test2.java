@@ -29,14 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Mecanum", group="Linear Opmode")
-public class Mecanum extends LinearOpMode {
+@Autonomous(name="Mecanum_Test2", group="Linear Opmode")
+public class Mecanum_Test2 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -91,16 +90,12 @@ public class Mecanum extends LinearOpMode {
             {
                 MotorStrenght = 0.75;
             }
-            
+
             // Setup a variable for each drive wheel to save power level for telemetry
             double LFPower;
             double RFPower;
             double LBPower;
             double RBPower;
-            double R_LFPower;
-            double R_RFPower;
-            double R_LBPower;
-            double R_RBPower;
 
             double IntakePower;
             double PistonPower = 0;
@@ -133,29 +128,16 @@ public class Mecanum extends LinearOpMode {
 
 
 
-            LFPower = (gamepad1.left_stick_y - gamepad1.left_stick_x);
-            LBPower = (gamepad1.left_stick_y + gamepad1.left_stick_x);
-            RFPower = (gamepad1.left_stick_y - gamepad1.left_stick_x);
-            RBPower = (gamepad1.left_stick_y + gamepad1.left_stick_x);
+            LFPower = (gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
+            LBPower = (gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
+            RFPower = (gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
+            RBPower = (gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
 
-
-            R_LFPower = (-gamepad1.right_stick_x);
-            R_LBPower = (-gamepad1.right_stick_x);
-            R_RFPower = (gamepad1.right_stick_x);
-            R_RBPower = (gamepad1.right_stick_x);
 
             LF.setPower(MotorStrenght * LFPower);
             RF.setPower(MotorStrenght * RFPower);
             LB.setPower(MotorStrenght * LBPower);
             RB.setPower(MotorStrenght * RBPower);
-
-            LF.setPower(MotorStrenght * R_LFPower);
-            RF.setPower(MotorStrenght * R_RFPower);
-            LB.setPower(MotorStrenght * R_LBPower);
-            RB.setPower(MotorStrenght * R_RBPower);
-
-           
-
 
 
             /*if (gamepad1.x) {

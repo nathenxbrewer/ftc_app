@@ -29,14 +29,14 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Mecanum", group="Linear Opmode")
-public class Mecanum extends LinearOpMode {
+@Autonomous(name="Mecanum_Test", group="Linear Opmode")
+public class Mecanum_Test extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -91,7 +91,7 @@ public class Mecanum extends LinearOpMode {
             {
                 MotorStrenght = 0.75;
             }
-            
+
             // Setup a variable for each drive wheel to save power level for telemetry
             double LFPower;
             double RFPower;
