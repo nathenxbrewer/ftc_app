@@ -56,7 +56,7 @@ public class AutoRed2_Simple extends LinearOpMode {
         Hook.setPosition(0);
         Thread.sleep(1000);
         DriveForward(1.0);
-        Thread.sleep(400);
+        Thread.sleep(300);
         StopMoving();
         Thread.sleep(2000);
         Intake.setPower(1.0);

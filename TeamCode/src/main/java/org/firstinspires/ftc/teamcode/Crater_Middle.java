@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Crater_Left", group="Linear Opmode")
+@Autonomous(name="Crater_Middle", group="Linear Opmode")
 //@Disabled
 public class Crater_Middle extends LinearOpMode {
 
